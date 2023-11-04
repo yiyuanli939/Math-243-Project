@@ -1,0 +1,47 @@
+---
+title: "Preprocessing Data"
+author: "Chris Li"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(dplyr)
+```
+
+```{r}
+education_primary <-read_csv("delta_public_00_12.csv")
+```
+
+```{r}
+# Select the code with year 2012 (credit Linda)
+# Select the first 585 meaningful variables (credit Chance)
+education_2012 <- education_primary %>% 
+  filter(academicyear == 2012) %>%
+  select(c(1:585))
+```
+
+```{r}
+#summary stats
+
+education_2012 %>%
+  select(starts_with("grad_rate_")) %>%
+  summarise(across(everything(), ~ sum(is.na(.)))) 
+```
+
+```{r}
+education_2012 <- education_2012%>%
+  filter(!is.na(grad_rate_150_p))
+```
+
+```{r}
+education_2000_2011 <- education_primary %>% 
+  filter(academicyear != 2012) %>%
+  select(c(1:585))%>%
+  filter(!is.na(grad_rate_150_p))
+```
+
+
+
+
